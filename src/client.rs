@@ -292,9 +292,12 @@ impl Client {
 
         let discog = match response {
             Ok(json) => {
-                let discog: Discography = json.json().await.unwrap_or_else(|_| Discography {
-                    items: vec![],
-                });
+                let discog: Discography = json.json().await.unwrap();
+
+                // // if empty panic
+                if discog.items.is_empty() {
+                    panic!(" ! No items found for artist with id: {}. JSON: {:?}", id, discog);
+                }
 
                 // group the songs by album
                 let mut albums: Vec<DiscographyAlbum> = vec![];
@@ -401,7 +404,8 @@ impl Client {
 
                 Discography { items: songs }
             },
-            Err(_) => {
+            Err(e) => {
+                panic!(" ! Error getting discography: {}", e);
                 return Ok(Discography { items: vec![] });
             }
         };
@@ -1064,15 +1068,15 @@ impl Searchable for Artist {
 }
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct UserData {
-    #[serde(rename = "PlaybackPositionTicks")]
+    #[serde(rename = "PlaybackPositionTicks", default)]
     playback_position_ticks: u64,
-    #[serde(rename = "PlayCount")]
+    #[serde(rename = "PlayCount", default)]
     play_count: u64,
-    #[serde(rename = "IsFavorite")]
+    #[serde(rename = "IsFavorite", default)]
     pub is_favorite: bool,
-    #[serde(rename = "Played")]
+    #[serde(rename = "Played", default)]
     played: bool,
-    #[serde(rename = "Key")]
+    #[serde(rename = "Key", default)]
     key: String,
 }
 

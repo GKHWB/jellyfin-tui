@@ -400,10 +400,10 @@ impl App {
 
         self.register_controls(self.mpv_state.clone());
 
-        let persist = self.config.as_ref().and_then(|c| c.get("persist")).and_then(|a| a.as_bool()).unwrap_or(true);
-        if persist {
-            let _ = self.from_saved_state().await;
-        }
+        // let persist = self.config.as_ref().and_then(|c| c.get("persist")).and_then(|a| a.as_bool()).unwrap_or(true);
+        // if persist {
+        //     let _ = self.from_saved_state().await;
+        // }
         #[cfg(target_os = "linux")]
         {
             if let Some(ref mut controls) = self.controls {
@@ -979,6 +979,7 @@ impl App {
     }
 
     pub fn save_state(&self) {
+        return;
         let persist = self.config.as_ref().and_then(|c| c.get("persist")).and_then(|a| a.as_bool()).unwrap_or(true);
         if !persist {
             return;
