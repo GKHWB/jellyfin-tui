@@ -294,11 +294,6 @@ impl Client {
             Ok(json) => {
                 let discog: Discography = json.json().await.unwrap();
 
-                // // if empty panic
-                if discog.items.is_empty() {
-                    panic!(" ! No items found for artist with id: {}. JSON: {:?}", id, discog);
-                }
-
                 // group the songs by album
                 let mut albums: Vec<DiscographyAlbum> = vec![];
                 let mut current_album = DiscographyAlbum { songs: vec![] };
@@ -1099,15 +1094,15 @@ pub struct DiscographyAlbum {
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct DiscographySongUserData {
-    #[serde(rename = "PlaybackPositionTicks")]
+    #[serde(rename = "PlaybackPositionTicks", default)]
     playback_position_ticks: u64,
-    #[serde(rename = "PlayCount")]
+    #[serde(rename = "PlayCount", default)]
     pub play_count: u64,
-    #[serde(rename = "IsFavorite")]
+    #[serde(rename = "IsFavorite", default)]
     pub is_favorite: bool,
-    #[serde(rename = "Played")]
+    #[serde(rename = "Played", default)]
     played: bool,
-    #[serde(rename = "Key")]
+    #[serde(rename = "Key", default)]
     key: String,
 }
 
@@ -1147,7 +1142,7 @@ pub struct DiscographySong {
     // image_blur_hashes: ImageBlurHashes,
     // #[serde(rename = "ImageTags")]
     // image_tags: ImageTags,
-    #[serde(rename = "IndexNumber")]
+    #[serde(rename = "IndexNumber", default = "index_default")]
     pub index_number: u64,
     #[serde(rename = "IsFolder", default)]
     is_folder: bool,
