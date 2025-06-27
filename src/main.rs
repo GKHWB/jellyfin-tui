@@ -37,7 +37,7 @@ use ratatui::prelude::{CrosstermBackend, Terminal};
 #[tokio::main]
 async fn main() {
 
-    let _lockfile = check_single_instance();
+    //let _lockfile = check_single_instance();
 
     let version = env!("CARGO_PKG_VERSION");
 
